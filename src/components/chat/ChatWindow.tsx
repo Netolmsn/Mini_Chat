@@ -54,7 +54,7 @@ export const ChatWindow: React.FC = () => {
     <WindowContainer>
       <Header>Mini Chat</Header>
       <UserProfile currentName={userName} onUpdateName={updateUserName} />
-      <MessageList messages={messages} />
+      <MessageList messages={messages} currentUserName={userName} />
       {typingUser && <TypingNotice>{typingUser} está digitando...</TypingNotice>}
       <ScrollAnchor ref={scrollRef} />
       <ChatInput onSendMessage={sendMessage} />

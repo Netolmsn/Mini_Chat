@@ -37,11 +37,16 @@ const Bubble = styled.div<{ $isMe: boolean }>`
   border-bottom-left-radius: ${props => props.$isMe ? '16px' : '4px'};
 `;
 
-export const MessageList: React.FC<{ messages: Message[] }> = ({ messages }) => {
+interface MessageListProps {
+  messages: Message[];
+  currentUserName: string;
+}
+
+export const MessageList: React.FC<MessageListProps> = ({ messages, currentUserName }) => {
   return (
     <ListContainer>
       {messages.map((msg) => {
-        const isMe = msg.author === "Você";
+        const isMe = msg.author === currentUserName;
         return (
           <BubbleWrapper key={msg.id} $isMe={isMe}>
             {!isMe && <AuthorLabel>{msg.author}</AuthorLabel>}
