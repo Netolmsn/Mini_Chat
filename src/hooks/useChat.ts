@@ -12,7 +12,16 @@ export const useChat = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [typingUser, setTypingUser] = useState<string | null>(null);
+  const [userName, setUserName] = useState<string>(() => {
+    return localStorage.getItem('@minichat:username') || 'Você';
+  });
+  
   const incomingIndexRef = useRef(0);
+  const userNameRef = useRef(userName);
+
+  useEffect(() => {
+    userNameRef.current = userName;
+  }, [userName]);
 
   useEffect(() => {
     mockApi.getMessages().then((data) => {
@@ -48,7 +57,8 @@ export const useChat = () => {
     if (!text.trim()) return;
 
     const myMessage = {
-      author: "Você",
+      author: userNameRef.current,
+      height: 0,
       text: text.trim()
     };
 
@@ -56,5 +66,12 @@ export const useChat = () => {
     setMessages((prev) => [...prev, saved]);
   }, []);
 
-  return { messages, isLoading, typingUser, sendMessage };
+  const updateUserName = useCallback((newName: string) => {
+    const trimmed = newName.trim();
+    if (!trimmed) return;
+    setUserName(trimmed);
+    localStorage.setItem('@minichat:username', trimmed);
+  }, []);
+
+  return { messages, isLoading, typingUser, userName, sendMessage, updateUserName };
 };

@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { useChat } from '../../hooks/useChat';
 import { MessageList } from './MessageList';
 import { ChatInput } from './ChatInput';
+import { UserProfile } from './UserProfile';
 
 const WindowContainer = styled.div`
   display: flex;
@@ -38,7 +39,7 @@ const ScrollAnchor = styled.div`
 `;
 
 export const ChatWindow: React.FC = () => {
-  const { messages, isLoading, typingUser, sendMessage } = useChat();
+  const { messages, isLoading, typingUser, userName, sendMessage, updateUserName } = useChat();
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -52,6 +53,7 @@ export const ChatWindow: React.FC = () => {
   return (
     <WindowContainer>
       <Header>Mini Chat</Header>
+      <UserProfile currentName={userName} onUpdateName={updateUserName} />
       <MessageList messages={messages} />
       {typingUser && <TypingNotice>{typingUser} está digitando...</TypingNotice>}
       <ScrollAnchor ref={scrollRef} />
